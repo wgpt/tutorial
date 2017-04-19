@@ -1,7 +1,7 @@
 #nvm安装教程
 ##windows
 
-1. `https://github.com/coreybutler/nvm-windows/releases`</br>
+1. https://github.com/coreybutler/nvm-windows/releases</br>
 下载`nvm-noinstall.zip`
 + 创建文件夹`nvm`
 + zip解压至`nvm/nvm`
