@@ -34,12 +34,21 @@
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm  
   export NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node/  
   export NVM_NPM_ORG_MIRROR=http://npm.taobao.org/mirrors/npm/  
-  source ~/git/nvm/nvm.sh
+
 4. 重启Xshell
   
 
 
+##npm 设置
+     1. npm config ls
+     2. npm config set cache D:\\nvm\\nvm\\npm-cache （包缓存）
+     3. npm config set prefix D:\\nvm\\nvm\\npm （包位置）
+     4. 配置环境变量 NPM_HOME D:\\nvm\\nvm\\npm
+     5. PATH += %NPM_HOME%;
+     6. npm cache clean (缓存清除)
 
-#npm淘宝镜像
-
-`npm install -g cnpm --registry=https://registry.npm.taobao.org`
+##安装nrm(境像选择,防墙)
+       1. npm install nrm -g
+       2. nrm ls
+       3. nrm test
+       4. nrm use
