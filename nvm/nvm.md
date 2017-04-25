@@ -26,7 +26,7 @@
 ****
 
 ##lunix
-1. sudo apt-get git
++ sudo apt-get git
 2. cd `~/` from anywhere then git clone `https://github.com/creationix/nvm.git` .nvm
 3. vi `~/.bashrc`
   #nvm  
@@ -40,15 +40,15 @@
 
 
 ##npm 设置
-     1. npm config ls
-     2. npm config set cache D:\\nvm\\nvm\\npm-cache （包缓存）
-     3. npm config set prefix D:\\nvm\\nvm\\npm （包位置）
-     4. 配置环境变量 NPM_HOME D:\\nvm\\nvm\\npm
-     5. PATH += %NPM_HOME%;
-     6. npm cache clean (缓存清除)
++  npm config ls
++  npm config set cache D:\\nvm\\nvm\\npm-cache （包缓存）
+3. npm config set prefix D:\\nvm\\nvm\\npm （包位置）
+4. 配置环境变量 NPM_HOME D:\\nvm\\nvm\\npm
+5. PATH += %NPM_HOME%;
+6. npm cache clean (缓存清除)
 
 ##安装nrm(境像选择,防墙)
-       1. npm install nrm -g
-       2. nrm ls
-       3. nrm test
-       4. nrm use
++ npm install nrm -g
++ nrm ls
++ nrm test
++ nrm use
