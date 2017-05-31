@@ -9,9 +9,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 你可以截取请求或响应在被 then 或者 catch 处理之前
 
 /*添加请求拦截器*/
+这里有个小地方需要注意，POST的传参需要序列化，不然服务端不会正确的接收哦，会报错。所以这里我们要对request的数据进行一次序列化。这里我用了 qs ,大家需要install一下
 axios.interceptors.request.use(function(config){
      /*在发送请求之前做某事*/
-     return config;
+     if(config.method  === 'post'){
+    config.data = qs.stringify(config.data);
+  }
+  return config;
    }，function(error){
      /*请求错误时做些事*/
      return Promise.reject(error);
