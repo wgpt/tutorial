@@ -16,7 +16,7 @@
     ServerName localhost
 </VirtualHost>
 
-2.host 127.0.0.1 www
+2.host 127.0.0.1 www   **切记加host
 
 3.http.config
 <Directory />
@@ -28,3 +28,4 @@
 Order deny,allow
 Allow from all
 </Directory>
+
