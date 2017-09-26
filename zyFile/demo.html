@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>上传</title>
+		<!-- 引用控制层插件样式 -->
+		<link rel="stylesheet" href="zyfill/control/css/zyUpload.css" type="text/css">
+		
+		<!--图片弹出层样式 必要样式-->
+		<script type="text/javascript" src="jquery-1.7.2.js"></script>
+		<!-- 引用核心层插件 -->
+		<script type="text/javascript" src="zyfill/core/zyFile.js"></script>
+		<!-- 引用控制层插件 -->
+		<script type="text/javascript" src="zyfill/control/js/zyUpload.js"></script>
+
+	</head>
+	<body>
+		<h1 style="text-align:center;">zyFile示例</h1>
+	    <div id="zyfile" class="demo" style="margin: 0 auto"></div>
+
+		<!-- 引用初始化JS -->
+		<script>
+            $("#zyfile").zyUpload({
+                width: "650px",                 // 宽度
+                height: "",                 // 宽度
+                itemWidth: "120px",                 // 文件项的宽度
+                itemHeight: "100px",                 // 文件项的高度
+                url: "/saveImage",// 上传文件的路径, 成功判断条件,status = 200
+                imgUrl: '',                       //图片host
+                data: [{flag:'http://image.taozhicai.com/ProductImage/20170916/1505526582441_400_400_1.png',name:'abc'}],	//原始填充数据 flag->图片路径;name->图片名 可为空
+                deleteUrl: '/deleteImage', //删除文件的路径, 成功判断条件,status = 200
+                public: 'zyfill/', //文件包url
+                aspectRatio: 0,                      //裁剪比例 0不限
+                maxFile: 0,                         //文件数量限制
+                multiple: true,                    // 是否可以多个文件上传
+                dragDrop: true,                    // 是否可以拖动上传文件
+                del: true,                    // 是否可以删除文件
+                finishDel: false,  				  // 是否在上传文件完成后删除预览
+
+
+				/*外部获得的回调接口*/
+                onSelect: function (selectFiles, allFiles) {    // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
+                    console.info("当前选择了以下文件：");
+                    console.info(selectFiles);
+                },
+                onProgress: function (file, loaded, total) {    // 正在上传的进度的回调方法
+                    console.info("当前正在上传此文件：");
+                    console.info("进度等信息如下：");
+                    console.info(loaded);
+                    console.info(total);
+                },
+                onDelete: function (file, files) {              // 删除一个文件的回调方法 file:当前删除的文件  files:删除之后的文件
+                    console.info("当前删除了此文件：");
+                },
+                onSuccess: function (file, response) {          // 文件上传成功的回调方法
+                    console.info("此文件上传成功：");
+                },
+                onFailure: function (file, response) {          // 文件上传失败的回调方法
+                    console.info("此文件上传失败：");
+                },
+                onComplete: function (response) {           	  // 上传完成的回调方法
+                    console.info("全部文件上传完成");
+                }
+            });
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+
