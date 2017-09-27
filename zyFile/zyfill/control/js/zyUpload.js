@@ -15,7 +15,7 @@
 				throw ("zyUpload - No such method: " + options);
 			}
 		}
-
+        options.maxSize = options.maxSize?options.maxSize*1024*1024:51200000;
 		return this.each(function(){
 			var para = {};    // 保留参数
 			var self = this;  // 保存组件对象
@@ -29,12 +29,14 @@
                 	deleteUrl		 : '', 								  //删除文件的路径, 成功判断条件,status = 200
                 	imgUrl		     : '', 								  //图片host
                 	aspectRatio      : 0,								  //裁剪比例
-					maxFile			 : 0,								  //文件限制
+					maxFile			 : 0,								  //文件数限制
+					maxSize			 : 0,　　　　　　　　　//文件大小限制　0 = 51200000
 					data			 : {},								  //原始填充数据
 					multiple         : true,  						      // 是否可以多个文件上传
 					dragDrop         : true,  						      // 是否可以拖动上传文件
 					del              : true,  						      // 是否可以删除文件
-					edit             : true,  						      // 是否可以重新上传文件
+					edit             : true,  						      // 是否可以裁剪文件
+					change             : true,  						  // 是否可以重新上传文件
 					tailor           : true,  						      // 是否可以截取图片
 					finishDel        : false,  						      // 是否在上传文件完成后删除预览
 					/* 提供给外部的接口方法 */
@@ -76,6 +78,7 @@
 	            	html += '					<div class="andArea">';
 	            	html += '						<div class="filePicker">点击选择文件</div>';
 	            	html += '						<input id="fileImage" type="file" size="30" name="fileselect[]" '+multiple+'>';
+                    html += '					<input id="changeImage" type="file" size="30" name="">';
 	            	html += '					</div>';
 	            	html += '				</div>';
 					html += '				<span id="fileDragArea" class="upload_drag_area">或者将文件拖到此处</span>';
@@ -106,6 +109,7 @@
 		            html += '				<div id="status_info" class="info">选中0张文件，共0B。</div>';
 		            html += '				<div class="btns">';
 		            html += '					<input id="fileImage" type="file" size="30" name="fileselect[]" '+multiple+'>';
+
 		            html += '					<div class="webuploader_pick">选择文件</div>';
 		            html += '					<div class="upload_btn">开始上传</div>';
 		            html += '				</div>';
@@ -170,8 +174,8 @@
 //					return arrFiles;
 //				}else{
 					for (var i = 0, file; file = files[i]; i++) {
-						if (file.size >= 51200000) {
-							alert('您这个"'+ file.name +'"文件大小过大');	
+						if (file.size >= para.maxSize) {
+							alert('您这个"'+ file.name +'"文件大小超过' + parseFloat(para.maxSize/1024/1024).toFixed(1) + 'M');
 						}else if(file.type != "image/jpeg" && file.type != "image/png") {
 							alert('您这个"'+ file.name +'"格式必须是jpg或png格式文件');
 						}else{
@@ -196,6 +200,7 @@
                 // 处理配置参数编辑和删除按钮
                 var editHtml = "";
                 var delHtml = "";
+                var changeHtml = "";
 
                 for(var i in data){
                     if(para.edit){  // 显示编辑按钮
@@ -204,12 +209,16 @@
                     if(para.del){  // 显示删除按钮
                         delHtml = '<span class="file_del" data-index="'+ i +'" title="删除"></span>';
                     }
+                    if(para.change){  // 显示重新上传按钮
+                        changeHtml = '<span class="file_change" data-index="'+ i +'" title="重新选择"></span>';
+                    }
 
                     // 图片上传的是图片还是其他类型文件
                         html += '<div id="uploadList_'+ i +'" class="upload_append_list init">';
                         html += '	<div class="file_bar">';
                         html += '		<div style="padding:5px;">';
                         html += '			<p class="file_name" title="'+data[i].name+'">' + data[i].name + '</p>';
+                        html += changeHtml;  // 编辑按钮的html
                         html += editHtml;  // 编辑按钮的html
                         html += delHtml;   // 删除按钮的html
                         html += '		</div>';
@@ -283,6 +292,10 @@
                         }
                     );
                 };
+
+
+
+
                 // 绑定删除按钮
                 funBindDelEvent();
                 funBindHoverEvent();
@@ -306,13 +319,18 @@
 				// 处理配置参数编辑和删除按钮
 				var editHtml = "";
 				var delHtml = "";
-				
+				var changeHtml = "";
+
 				if(para.edit){  // 显示编辑按钮
 					editHtml = '<span class="file_edit" data-index="'+file.index+'" title="编辑"></span>';
 				}
 				if(para.del){  // 显示删除按钮
 					delHtml = '<span class="file_del" data-index="'+file.index+'" title="删除"></span>';
 				}
+                if(para.change){  // 显示重新上传按钮
+                    changeHtml = '<span class="file_change" data-index="'+file.index+'" title="重新选择"></span>';
+                }
+
 				
 				// 处理不同类型文件代表的图标
 				var fileImgSrc = "control/images/fileType/";
@@ -333,6 +351,7 @@
 					html += '	<div class="file_bar">';
 					html += '		<div style="padding:5px;">';
 					html += '			<p class="file_name" title="'+file.name+'">' + file.name + '</p>';
+					html += changeHtml; //重新上传按钮html
 					html += editHtml;  // 编辑按钮的html
 					html += delHtml;   // 删除按钮的html
 					html += '		</div>';
@@ -612,6 +631,48 @@
 						$("#zyfile #fileImage").click();
 		            });
 				}
+
+                //重新选择事件
+                $("#zyfile").delegate('.file_change','click',function () {
+                    $("#zyfile #changeImage").attr('data-index',$(this).attr('data-index')).click();
+                });
+
+                $("#zyfile #changeImage").change(function (e) {
+
+                    var file = e.target.files[0];
+                    var index = $(this).attr('data-index');
+                    if(file){
+                        if (file.size >= para.maxSize) {
+                        	console.log(file.size,para.maxSize);
+                            alert('您这个"'+ file.name +'"文件大小超过' + parseFloat(para.maxSize/1024/1024).toFixed(0) + 'M');
+                            return
+                        }else if(file.type != "image/jpeg" && file.type != "image/png") {
+                            alert('您这个"'+ file.name +'"格式必须是jpg或png格式文件');
+                        	return
+                        }
+
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = function(evn) {
+
+                            $("#uploadProgress_" + index).hide();
+                            $("#uploadSuccess_" + index).hide();
+                            $("#uploadFailure_" + index).hide();
+
+                            $('#uploadImage_' + index).attr('src',evn.target.result);
+                            if(ZYFILE.uploadBase64[index]['flag']) ZYFILE.successNum--;
+
+                            ZYFILE.uploadBase64[index]['src'] = evn.target.result;
+                            ZYFILE.uploadBase64[index]['status'] = 0;
+
+                            // console.log(evn.target.result);
+
+                        }
+                    }
+
+
+                });
+
 			};
 			
 			

@@ -15,7 +15,7 @@ var ZYFILE = {
 		perUploadFile : [],           // 存放永久的文件数组，方便删除使用
 		fileNum : 0,                  // 代表文件总个数，因为涉及到继续添加，所以下一次添加需要在它的基础上添加索引
 	    successNum: 0,				  //已上传成功数
-	    maxFile: 0,					  //文件限制
+	    maxFile: 0 ,					  //文件限制
 		/* 提供给外部的接口 */
 		filterFile : function(files){ // 提供给外部的过滤文件格式等的接口，外部需要把过滤后的文件返回
 			return files;
@@ -182,7 +182,7 @@ var ZYFILE = {
 			var self = this;  // 在each中this指向没个v  所以先将this保留
 			// 遍历所有文件  ，在调用单个文件上传的方法
             console.log(self.maxFile,self.successNum);
-			if(self.maxFile && self.maxFile == self.successNum  || self.maxFile < $('#zyfile .upload_append_list').length){
+			if(self.maxFile && (self.maxFile == self.successNum  || self.maxFile < $('#zyfile .upload_append_list')).length){
 				alert('文件大于'+self.maxFile +'件,请删除多余文件');
 				return
 			}
@@ -304,5 +304,9 @@ var ZYFILE = {
 					self.funUploadFiles(e); 
 				}, false);	
 			}
+
+
+
+
 		}
 };

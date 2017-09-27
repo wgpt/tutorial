@@ -82,6 +82,9 @@
 #zyfile #fileImage{
 	display: none;
 }
+#zyfile #changeImage{
+	display: none;
+}
 
 #zyfile .status_bar{
 	border-top: 1px solid #DADADA;
@@ -239,6 +242,25 @@
     text-overflow:    ellipsis;    /* IE, Safari (WebKit) */
     float: left;
 }
+#zyfile .file_change{
+	background: url("../images/change.png") no-repeat scroll 0 0 transparent;
+	width:18px;
+	height:18px;
+	display: inline;
+	-moz-user-select: none;
+	position: absolute;
+	right:45px;
+	margin-top:3px;
+}
+#zyfile .file_change input{
+	display: none;
+}
+
+#zyfile .file_change:hover{
+	background: url("../images/change_blue.png") no-repeat scroll 0 0 transparent;
+}
+
+
 #zyfile .file_edit{
 	background: url("../images/edit_white.png") no-repeat scroll 0 0 transparent;
 	width:18px;
