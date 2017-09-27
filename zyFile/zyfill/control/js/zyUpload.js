@@ -15,7 +15,7 @@
 				throw ("zyUpload - No such method: " + options);
 			}
 		}
-        options.maxSize = options.maxSize?options.maxSize*1024*1024:51200000;
+        options.maxFileSize = options.maxFileSize?options.maxFileSize*1024*1024:51200000;
 		return this.each(function(){
 			var para = {};    // 保留参数
 			var self = this;  // 保存组件对象
@@ -29,8 +29,10 @@
                 	deleteUrl		 : '', 								  //删除文件的路径, 成功判断条件,status = 200
                 	imgUrl		     : '', 								  //图片host
                 	aspectRatio      : 0,								  //裁剪比例
+                	maxSize			 : [0,0],            					//裁剪最大限制
+                	minSize			 : [0,0],			  					//裁剪最小限制
 					maxFile			 : 0,								  //文件数限制
-					maxSize			 : 0,　　　　　　　　　//文件大小限制　0 = 51200000
+					maxFileSize		 : 0,　　　　　　　　　				  //文件大小限制　0 = 51200000
 					data			 : {},								  //原始填充数据
 					multiple         : true,  						      // 是否可以多个文件上传
 					dragDrop         : true,  						      // 是否可以拖动上传文件
@@ -174,8 +176,8 @@
 //					return arrFiles;
 //				}else{
 					for (var i = 0, file; file = files[i]; i++) {
-						if (file.size >= para.maxSize) {
-							alert('您这个"'+ file.name +'"文件大小超过' + parseFloat(para.maxSize/1024/1024).toFixed(1) + 'M');
+						if (file.size >= para.maxFileSize) {
+							alert('您这个"'+ file.name +'"文件大小超过' + parseFloat(para.maxFileSize/1024/1024).toFixed(1) + 'M');
 						}else if(file.type != "image/jpeg" && file.type != "image/png") {
 							alert('您这个"'+ file.name +'"格式必须是jpg或png格式文件');
 						}else{
@@ -400,6 +402,8 @@
 				$("body").zyPopup({
 					src        :   imgSrc,            // 图片的src路径
                     aspectRatio:   para.aspectRatio,  //裁剪比例
+                    maxSize: para.maxSize,            //裁剪最大限制
+					minSize: para.minSize,			  //裁剪最小限制
 					onTailor   :   function(val){     // 回调返回裁剪的坐标和宽高的值
 						$("#uploadTailor_" + index).show();       
 						$.getScript(para.public + "jquery.json-2.4.js", function(){
@@ -642,9 +646,9 @@
                     var file = e.target.files[0];
                     var index = $(this).attr('data-index');
                     if(file){
-                        if (file.size >= para.maxSize) {
-                        	console.log(file.size,para.maxSize);
-                            alert('您这个"'+ file.name +'"文件大小超过' + parseFloat(para.maxSize/1024/1024).toFixed(0) + 'M');
+                        if (file.size >= para.maxFileSize) {
+                        	console.log(file.size,para.maxFileSize);
+                            alert('您这个"'+ file.name +'"文件大小超过' + parseFloat(para.maxFileSize/1024/1024).toFixed(0) + 'M');
                             return
                         }else if(file.type != "image/jpeg" && file.type != "image/png") {
                             alert('您这个"'+ file.name +'"格式必须是jpg或png格式文件');

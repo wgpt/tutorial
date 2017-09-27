@@ -18,8 +18,6 @@
 		<h1 style="text-align:center;">zyFile示例</h1>
 	    <div id="zyfile" class="demo" style="margin: 0 auto"></div>
 
-
-		<input type="file" value="打开文件">
 		<!-- 引用初始化JS -->
 		<script>
             $("#zyfile").zyUpload({
@@ -33,8 +31,10 @@
                 deleteUrl: '/deleteImage', //删除文件的路径, 成功判断条件,status = 200
                 public: 'zyfill/', //文件包url
                 aspectRatio: 0,                      //裁剪比例 0不限
+                maxSize: [0,0],            //裁剪最大限制
+                minSize: [0,0],			  //裁剪最小限制
                 maxFile: 0,                         //文件数量限制
-                maxSize: 0,                         //文件大小限制 0 为 48M
+                maxFileSize: 0,                         //文件大小限制 0 为 48M
                 multiple: true,                    // 是否可以多个文件上传
                 dragDrop: true,                    // 是否可以拖动上传文件
                 del: true,                    // 是否可以删除文件

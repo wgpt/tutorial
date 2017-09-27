@@ -89,8 +89,8 @@
 					zoomContent.animate({
 						width: image.width(),
 						height: image.height(),
-						marginTop: -(image.height() / 2) - borderWidth,
-						marginLeft: -(image.width() / 2) - borderWidth
+						marginTop: imageHeight > windowHeight? -(windowHeight / 2) :-(image.height() / 2) - borderWidth,
+						marginLeft: imageWidth > windowWidth? -(windowWidth / 2) :-(image.width() / 2) - borderWidth
 					}, 200, function() {
 						show(image);
 					});
@@ -120,6 +120,10 @@
 						// 设置默认选择区域的范围
 						var width = $("#tailorImg").width();
 						var height = $("#tailorImg").height();
+						width>windowWidth?width=windowWidth: '';
+						height>windowHeight?height=windowHeight: '';
+
+
 						var x1 = (width/2)-(width/5);
 						var y1 = (height/2)-(height/5);
 						var x2 = (width/2)+(width/5);
@@ -129,13 +133,17 @@
 					        setSelect : [x1,y1,x2,y2], //setSelect是Jcrop插件内部已定义的运动方法
 					        onChange : setCoords,
 							onSelect : setCoords,
-                            aspectRatio: para.aspectRatio || 0
+                            aspectRatio: para.aspectRatio || 0,
+                            maxSize: para.maxSize || [0,0],
+                            minSize: para.minSize || [0,0]
 					    });
 					});
 				}else{  // 加载过js和css文件
 					// 设置默认选择区域的范围
 					var width = $("#tailorImg").width();
 					var height = $("#tailorImg").height();
+                    width>windowWidth?width=windowWidth: '';
+                    height>windowHeight?height=windowHeight: '';
 					var x1 = (width/2)-(width/5);
 					var y1 = (height/2)-(height/5);
 					var x2 = (width/2)+(width/5);
