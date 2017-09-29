@@ -161,10 +161,17 @@ var ZYFILE = {
                     if(d.status == 200){
                         // 回调到外部
                         self.uploadBase64[k].status = 2;
-                        console.log('ad');
                         self.successNum--;
-                        console.log(self.successNum);
                         self.onDelete(k,d);
+
+                        var list=[];
+                        for(var i in self.uploadBase64){
+                            if(self.uploadBase64[i].status == 1){
+                                list.push(self.uploadBase64[i]);
+                            }
+                        }
+                        // 回调全部完成方法
+                        self.onComplete(list,"全部数据更新完成");
 
                     }else{
                         self.onFailure(k, d,'删除失败');
@@ -210,12 +217,19 @@ var ZYFILE = {
 					d = JSON.parse(d);
                     if(d.status == 200){
                         // 回调到外部
-                        self.uploadBase64[k].flag = d.flag
+                        self.uploadBase64[k].flag = d.flag;
+                        self.uploadBase64[k].src = d.flag;
 						self.successNum++;
                         self.onSuccess(k, d);
-                        if(self.uploadBase64.length == k){
+                        if(self.uploadBase64.length == parseInt(k) + 1){
+                            var list=[];
+                            for(var i in self.uploadBase64){
+                                if(self.uploadBase64[i].status == 1){
+                                    list.push(self.uploadBase64[i]);
+                                }
+                            }
                             // 回调全部完成方法
-                            self.onComplete("全部完成");
+                            self.onComplete(list,"全部数据更新完成");
                         }
                     }else{
                         self.uploadBase64[k].status = 0;

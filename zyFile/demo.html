@@ -17,7 +17,7 @@
 	<body>
 		<h1 style="text-align:center;">zyFile示例</h1>
 	    <div id="zyfile" class="demo" style="margin: 0 auto"></div>
-
+		<input id="file" name='file' style="width: 100%;height: 100px">
 		<!-- 引用初始化JS -->
 		<script>
             $("#zyfile").zyUpload({
@@ -27,7 +27,7 @@
                 itemHeight: "100px",                 // 文件项的高度
                 url: "/saveImage",// 上传文件的路径, 成功判断条件,status = 200
                 imgUrl: '',                       //图片host
-                data: [{flag:'http://image.taozhicai.com/ProductImage/20170916/1505526582441_400_400_1.png',name:'abc'}],	//原始填充数据 flag->图片路径;name->图片名 可为空
+                data: [{flag:'http://image.taozhicai.com/ProductImage/20170916/1505526582441_400_400_1.png',name:'abc'}],	//原始填充数据 flag->图片路径;name->图片名 可为空 /**/
                 deleteUrl: '/deleteImage', //删除文件的路径, 成功判断条件,status = 200
                 public: 'zyfill/', //文件包url
                 aspectRatio: 0,                      //裁剪比例 0不限
@@ -61,8 +61,8 @@
                 onFailure: function (file, response) {          // 文件上传失败的回调方法
                     console.info("此文件上传失败：");
                 },
-                onComplete: function (response) {           	  // 上传完成的回调方法
-                    console.info("全部文件上传完成");
+                onComplete: function (file,response) {           	  // 上传完成的回调方法
+                    $('#file').val(JSON.stringify(file));
                 }
             });
 		</script>

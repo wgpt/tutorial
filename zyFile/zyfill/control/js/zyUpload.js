@@ -195,6 +195,7 @@
              * 返回: 预览的html
              */
 			this.initHtml = function (data) {
+                para.onComplete(data,"全部数据更新完成"); //原始数据更新
                 var html = "";
                 var imgWidth = parseInt(para.itemWidth.replace("px", ""))-15;
                 var imgHeight = parseInt(para.itemHeight.replace("px", ""))-10;
@@ -556,6 +557,7 @@
 						console.log(file);
 						$("#uploadProgress_" + file).hide();
 						$("#uploadSuccess_" + file).show();
+                        $("#uploadList_" + file).attr('src',para.imgUrl + response.flag);
 						// $("#uploadInf").append("<p>上传成功，文件地址是：" + response + "</p>");
 						// 根据配置参数确定隐不隐藏上传成功的文件
 						if(para.finishDel){
