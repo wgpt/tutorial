@@ -12,7 +12,7 @@ gulp.task('minimg', function() {
         return false;
     }
 
-    return gulp.src(argv.s + '/**')
+    return gulp.src(argv.s + '/**/*.{png,jpg,jpeg}')
         .pipe(load.tinyimg('LgNEWFe_fJscM8bPeTmtw01triCEfNVm'))
         .pipe(gulp.dest(argv.s + 'Done/'));
 });
