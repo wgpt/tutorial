@@ -72,14 +72,14 @@
 				
 				if(para.dragDrop){
 					// 创建带有拖动的html
-					html += '<form id="uploadForm" action="'+para.url+'" method="post" enctype="multipart/form-data">';
+					html += '<div id="uploadForm" action="'+para.url+'">';
 					html += '	<div class="upload_box">';
 					html += '		<div class="upload_main">';
 					html += '			<div class="upload_choose">';
 	            	html += '				<div class="convent_choice">';
 	            	html += '					<div class="andArea">';
 	            	html += '						<div class="filePicker">点击选择文件</div>';
-	            	html += '						<input id="fileImage" type="file" size="30" name="fileselect[]" '+multiple+'>';
+	            	html += '						<input id="fileImage" type="file" size="30" name="" '+multiple+'>';
                     html += '					<input id="changeImage" type="file" size="30" name="">';
 	            	html += '					</div>';
 	            	html += '				</div>';
@@ -99,20 +99,20 @@
 					html += '		</div>';
 					html += '		<div id="uploadInf" class="upload_inf"></div>';
 					html += '	</div>';
-					html += '</form>';
+					html += '</div>';
 				}else{
 					var imgWidth = parseInt(para.itemWidth.replace("px", ""))-15;
 					
 					// 创建不带有拖动的html
-					html += '<form id="uploadForm" action="'+para.url+'" method="post" enctype="multipart/form-data">';
+					html += '<div id="uploadForm" action="'+para.url+'">';
 					html += '	<div class="upload_box">';
 					html += '		<div class="upload_main single_main">';
 		            html += '			<div class="status_bar">';
-		            html += '				<div id="status_info" class="info">选中0张文件，共0B。</div>';
+		            // html += '				<div id="status_info" class="info">选中0张文件，共0B。</div>';
 		            html += '				<div class="btns">';
-		            html += '					<input id="fileImage" type="file" size="30" name="fileselect[]" '+multiple+'>';
-
-		            html += '					<div class="webuploader_pick">选择文件</div>';
+                    html += '						<input id="fileImage" type="file" size="30" name="" '+multiple+'>';
+                    html += '					<input id="changeImage" type="file" size="30" name="">';
+                    html += '					<div class="webuploader_pick">选择文件</div>';
 		            html += '					<div class="upload_btn">开始上传</div>';
 		            html += '				</div>';
 		            html += '			</div>';
@@ -131,7 +131,7 @@
 					html += '		</div>';
 					html += '		<div id="uploadInf" class="upload_inf"></div>';
 					html += '	</div>';
-					html += '</form>';
+					html += '</div>';
 				}
 				
 	            $(self).append(html).css({"width":para.width,"height":para.height});
