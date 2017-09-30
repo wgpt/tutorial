@@ -1,5 +1,13 @@
+    //数据处理
+    public function save(){
+        $data['file'] = htmlspecialchars_decode($data['file']); //特殊处理,因里面有 /
+        dump(json_decode($data['file'],true));exit;
+    }
+
+
+    //目录
     public function path(){
-        $path = C('IMAGE_PATH') . '/Business/';
+        $path ='./Business/';
         if (!is_dir("{$path}")) {
             mkdir("{$path}", 0777, true);
         }
@@ -7,6 +15,8 @@
         return $path;
     }
 
+
+    //保存图片
     public function saveImage(){
         $data = lm_get();
         $base64 = $data['src'];
@@ -54,6 +64,7 @@
         }*/
     }
 
+    //删除图片
     public function deleteImage(){
         $data = lm_get();
         if (unlink($data['flag']))
