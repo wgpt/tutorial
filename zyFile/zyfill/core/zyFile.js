@@ -203,24 +203,39 @@ var ZYFILE = {
 		funUploadFile : function(k,v){
 
 			var self = this;  // 在each中this指向没个v  所以先将this保留
-			$.ajax({
-				type: 'post',
-				url: self.url,
-				data : v,
-				before: function (xhr) {
-					xhr.upload.addEventListener('progress',function (e) {
-                        // 回调到外部
-                        self.onProgress(k, e.loaded, e.total);
-                    })
-                },
-				success:function (d) {
-					d = JSON.parse(d);
+
+			var formdata = new FormData();
+			// formdata.append("file", file);
+
+            for(var i in v){
+                formdata.append(i,v[i]);
+            }
+
+
+			var xhr = new XMLHttpRequest();
+			// 绑定上传事件
+			// 进度
+		    xhr.upload.addEventListener("progress",	 function(e){
+		    	// 回调到外部
+		    	self.onProgress(k, e.loaded, e.total);
+		    }, false); 
+		    // 完成
+		    xhr.addEventListener("load", function(e){
+
+                if(xhr.status != 200){
+                    self.uploadBase64[k].status = 0;
+                    self.onFailure(k, xhr.responseText);
+                }else{
+                    var d = JSON.parse(xhr.responseText);
+
                     if(d.status == 200){
                         // 回调到外部
                         self.uploadBase64[k].flag = d.flag;
                         self.uploadBase64[k].src = d.flag;
-						self.successNum++;
+
+                        self.successNum++;
                         self.onSuccess(k, d);
+
                         if(self.uploadBase64.length == parseInt(k) + 1){
                             var list=[];
                             for(var i in self.uploadBase64){
@@ -234,59 +249,23 @@ var ZYFILE = {
                     }else{
                         self.uploadBase64[k].status = 0;
                         self.onFailure(k, d.message);
-					}
-
-                },
-				error: function (status) {
-                    self.uploadBase64[k].status = 0;
-                    self.onFailure(k, status);
-                }
-			})
-
-			/*var formdata = new FormData();
-			// formdata.append("file", file);
-			// 添加裁剪的坐标和宽高发送给后台
-			if($("#uploadTailor_"+k).length>0){
-				// 除了这样获取不到zyUpload的值啊啊啊啊啊啊啊啊啊啊啊
-				// formdata.append("tailor", $("#uploadTailor_"+file.index).attr("tailor"));
-				v = JSON.stringify(v);
-				formdata.append('data',v);
-			}
-			var xhr = new XMLHttpRequest();
-			// 绑定上传事件
-			// 进度
-		    xhr.upload.addEventListener("progress",	 function(e){
-		    	// 回调到外部
-		    	self.onProgress(k, e.loaded, e.total);
-		    }, false); 
-		    // 完成
-		    xhr.addEventListener("load", function(e){
-                var d = JSON.parse(xhr.responseText);
-
-		    	if(this.status == 200 && d.status == 200){
-                    // 从文件中删除上传成功的文件  false是不执行onDelete回调方法
-                    self.funDeleteFile(k, false);
-                    // 回调到外部
-                    self.onSuccess(file, d);
-                    if(self.uploadFile.length==0){
-                        // 回调全部完成方法
-                        self.onComplete("全部完成");
                     }
-				}else{
-                    self.onFailure(file, xhr.responseText);
-				}
+                }
 
 		    }, false);  
 		    // 错误
-		    xhr.addEventListener("error", function(e){
+		    xhr.addEventListener("error", function(){
 		    	// 回调到外部
-		    	self.onFailure(file, xhr.responseText);
-		    }, false);  
+		    	// self.onFailure(file, xhr.responseText);
+                console.log('error');
+                self.uploadBase64[k].status = 0;
+                self.onFailure(k, '网络错误');
+		    }, false);
 
 
 
 			xhr.open("POST",self.url, true);
-			xhr.send(formdata);*/
+			xhr.send(formdata);
 		},
 		// 返回需要上传的文件
 		funReturnNeedFiles : function(){
