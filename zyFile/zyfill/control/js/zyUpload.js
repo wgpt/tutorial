@@ -37,11 +37,13 @@
                 data: {},								  //原始填充数据
                 multiple: true,  						      // 是否可以多个文件上传
                 dragDrop: true,  						      // 是否可以拖动上传文件
-                del: true,  						      // 是否可以删除文件
-                edit: true,  						      // 是否可以裁剪文件
-                change: true,  						  // 是否可以重新上传文件
+                del: true,  						      // 是否开启删除文件
+                edit: true,  						      // 是否开启裁剪文件
+                change: true,  						  // 是否开启重新上传文件
                 tailor: true,  						      // 是否可以截取图片
                 finishDel: false,  						      // 是否在上传文件完成后删除预览
+                singlePut: false,                            //是否选择立即上传
+
                 /* 提供给外部的接口方法 */
                 onSelect: function (selectFiles, allFiles) {
                 }, // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
@@ -96,7 +98,7 @@
                     // html += '				<div id="status_info" class="info">选中0张文件，共0B。</div>';
                     html += '				<div class="btns">';
                     html += '					<div class="webuploader_pick">继续选择</div>';
-                    html += '					<div class="upload_btn">开始上传</div>';
+                    html += '					<div class="upload_btn" style="display: '+(para.singlePut?'none':'block')  +'">开始上传</div>';
                     html += '				</div>';
                     html += '			</div>';
                     html += '			<div id="preview" class="upload_preview"></div>';
@@ -120,7 +122,7 @@
                     html += '						<input id="fileImage" type="file" size="30" name="" ' + multiple + '>';
                     html += '					<input id="changeImage" type="file" size="30" name="">';
                     html += '					<div class="webuploader_pick">选择文件</div>';
-                    html += '					<div class="upload_btn">开始上传</div>';
+                    html += '					<div class="upload_btn" style="display: '+(para.singlePut?'none':'block')  +'">开始上传</div>';
                     html += '				</div>';
                     html += '			</div>';
                     html += '			<div id="preview" class="upload_preview">';
@@ -245,7 +247,6 @@
                     html += '</div>';
                     ZYFILE.uploadBase64[i] = data[i];
                     ZYFILE.uploadBase64[i].status = 1;
-                    console.log(ZYFILE.uploadBase64);
                     if (para.dragDrop) {
                         $("#preview").append(html);
                     } else {
@@ -434,6 +435,12 @@
                             ZYFILE.uploadBase64[index]['status'] = 0;
                             $("#uploadImage_" + index).attr("src", base64);
                             $('#uploadSuccess_' + index).hide();
+
+                            if(para.singlePut){
+                                $('#zyfile .upload_btn').click();
+                            }
+
+
                         });
                     },
                     public: para.public
@@ -460,7 +467,6 @@
                         para.onSelect(selectFiles, allFiles);  // 回调方法
                         // self.funSetStatusInfo(ZYFILE.funReturnNeedFiles());  // 显示统计信息
                         var html = '', i = 0;
-                        console.log(selectFiles);
                         // 组织预览html
                         var funDealtPreviewHtml = function () {
                             file = selectFiles[i];
@@ -478,6 +484,7 @@
                             } else {
                                 // 走到这里说明文件html已经组织完毕，要把html添加到预览区
                                 funAppendPreviewHtml(html);
+
                             }
                         };
 
@@ -492,6 +499,10 @@
                             // 绑定删除按钮
                             funBindDelEvent();
                             funBindHoverEvent();
+
+                            if(para.singlePut){
+                                $('#zyfile .upload_btn').click();
+                            }
                         };
 
                         // 绑定删除按钮事件
@@ -547,10 +558,12 @@
                         };
 
                         funDealtPreviewHtml();
+
+
+
                     },
                     onDelete: function (k, d) {
                         para.onDelete(k, d);  // 回调方法
-                        console.log(k, "#uploadList_" + k);
                         // 移除效果
                         $("#uploadList_" + k).remove();
                         // 重新设置统计栏信息
@@ -569,7 +582,6 @@
                     },
                     onSuccess: function (file, response) {
                         para.onSuccess(file, response);  // 回调方法
-                        console.log(file);
                         $("#uploadProgress_" + file).hide();
                         $("#uploadSuccess_" + file).show();
                         $("#uploadList_" + file).attr('src', para.imgUrl + response.flag);
@@ -599,7 +611,6 @@
                     },
                     onComplete: function (response) {
                         para.onComplete(response);  // 回调方法
-                        console.info(response);
                     },
                     onDragOver: function () {
                         $(this).addClass("upload_drag_hover");
@@ -664,7 +675,6 @@
                     var index = $(this).attr('data-index');
                     if (file) {
                         if (file.size >= para.maxFileSize) {
-                            console.log(file.size, para.maxFileSize);
                             alert('您这个"' + file.name + '"文件大小超过' + parseFloat(para.maxFileSize / 1024 / 1024).toFixed(0) + 'M');
                             return
                         } else if (file.type != "image/jpeg" && file.type != "image/png") {
@@ -686,6 +696,10 @@
                             ZYFILE.uploadBase64[index]['src'] = evn.target.result;
                             ZYFILE.uploadBase64[index]['status'] = 0;
 
+
+                            if(para.singlePut){
+                                $('#zyfile .upload_btn').click();
+                            }
                             // console.log(evn.target.result);
 
                         }

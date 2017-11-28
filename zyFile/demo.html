@@ -36,11 +36,11 @@
         minSize: [0, 0],			  // 裁剪最小限制
         maxFile: 0,                         // 文件数量限制
         maxFileSize: 0,                         //文件大小限制 0 为 48M
-        multiple: true,                    // 是否可以多个文件上传
+        multiple: false,                    // 是否可以多个文件上传
         dragDrop: false,                    // 是否可以拖动上传文件
         del: true,                    // 是否可以删除文件
         finishDel: false,  				  // 是否在上传文件完成后删除预览
-
+        singlePut: false,                     //是否开启选择即上传
 
         /*外部获得的回调接口*/
         onSelect: function (selectFiles, allFiles) {    // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
@@ -62,8 +62,8 @@
         onFailure: function (file, response) {          // 文件上传失败的回调方法
             console.info("此文件上传失败：");
         },
-        onComplete: function (file, response) {           	  // 上传完成的回调方法
-            $('#file').val(JSON.stringify(file));
+        onComplete: function (files, response) {           	  // 上传完成的回调方法 src 上传后的图片地址
+            $('#file').val(JSON.stringify(files));
         }
     });
 </script>
