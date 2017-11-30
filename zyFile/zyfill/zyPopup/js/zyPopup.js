@@ -113,7 +113,7 @@
             this.createTailorPlug = function () {
                 if ($("head").html().indexOf("jquery.Jcrop") < 0) {  // 代表没有加载过js和css文件
                     // 动态引入裁剪的js和css文件
-                    $("<link>").attr({
+                    $("<link />").attr({
                         rel: "stylesheet",
                         type: "text/css",
                         href: para.public + "jcrop_zh/css/jquery.Jcrop.css"

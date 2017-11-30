@@ -88,8 +88,8 @@
                     html += '				<div class="convent_choice">';
                     html += '					<div class="andArea">';
                     html += '						<div class="filePicker">点击选择文件</div>';
-                    html += '						<input id="fileImage" type="file" size="30" name="" ' + multiple + '>';
-                    html += '					<input id="changeImage" type="file" size="30" name="">';
+                    html += '                       <input id="fileImage" type="file" size="30" name="" ' + multiple + ' />';
+                    html += '                       <input id="changeImage" type="file" size="30" name="" />';
                     html += '					</div>';
                     html += '				</div>';
                     html += '				<span id="fileDragArea" class="upload_drag_area">或者将文件拖到此处</span>';
@@ -119,8 +119,8 @@
                     html += '			<div class="status_bar">';
                     // html += '				<div id="status_info" class="info">选中0张文件，共0B。</div>';
                     html += '				<div class="btns">';
-                    html += '						<input id="fileImage" type="file" size="30" name="" ' + multiple + '>';
-                    html += '					<input id="changeImage" type="file" size="30" name="">';
+                    html += '                   <input id="fileImage" type="file" size="30" name="" ' + multiple + ' />';
+                    html += '                   <input id="changeImage" type="file" size="30" name="" />';
                     html += '					<div class="webuploader_pick">选择文件</div>';
                     html += '					<div class="upload_btn" style="display: '+(para.singlePut?'none':'block')  +'">开始上传</div>';
                     html += '				</div>';
@@ -267,7 +267,7 @@
 
                     if ($("head").html().indexOf("zyPopup") < 0) {  // 代表没有加载过js和css文件
                         // 动态引入裁剪的js和css文件
-                        $("<link>").attr({
+                        $("<link />").attr({
                             rel: "stylesheet",
                             type: "text/css",
                             href: para.public + "zyPopup/css/zyPopup.css"
@@ -518,7 +518,7 @@
                             if ($("#zyfile .addInit .file_edit").length > 0) {
                                 if ($("head").html().indexOf("zyPopup") < 0) {  // 代表没有加载过js和css文件
                                     // 动态引入裁剪的js和css文件
-                                    $("<link>").attr({
+                                    $("<link />").attr({
                                         rel: "stylesheet",
                                         type: "text/css",
                                         href: para.public + "zyPopup/css/zyPopup.css"
