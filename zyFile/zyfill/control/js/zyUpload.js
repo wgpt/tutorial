@@ -33,7 +33,7 @@
                 minSize: [0, 0],			  					//裁剪最小限制
                 maxFile: 0,								  //文件数限制
                 maxFileSize: 0,　　　　　　　　　				  //文件大小限制　0 = 51200000
-                quality: 2,                               // 图片质量 0~1，开启都是jpeg
+                quality: 1,                               // 图片质量 0~1，开启都是jpeg
                 data: {},								  //原始填充数据
                 multiple: true,  						      // 是否可以多个文件上传
                 dragDrop: true,  						      // 是否可以拖动上传文件
