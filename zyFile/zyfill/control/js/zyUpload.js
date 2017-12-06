@@ -180,11 +180,13 @@
              */
             this.funFilterEligibleFile = function (files) {
                 var arrFiles = [];  // 替换的文件数组
-//				if(files.length>2){
-//					alert("请选择2个以内的文件");
-//					return arrFiles;
-//				}else{
                 for (var i = 0, file; file = files[i]; i++) {
+                    // 上传文件数限制
+                    if(ZYFILE.uploadBase64.length + arrFiles.length + 1 > para.maxFile){
+                        alert('已经超过' + para.maxFile + '个限制！');
+                        break;
+                    }
+
                     if (file.size >= para.maxFileSize) {
                         alert('您这个"' + file.name + '"文件大小超过' + parseFloat(para.maxFileSize / 1024 / 1024).toFixed(1) + 'M');
                     } else if (file.type != "image/jpeg" && file.type != "image/png") {
@@ -195,7 +197,6 @@
                     }
                 }
                 return arrFiles;
-//				}
             };
 
             /**
