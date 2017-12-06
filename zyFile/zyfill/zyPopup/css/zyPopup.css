@@ -36,6 +36,7 @@
 	background: #ececec;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 	border-radius: 4px;
+	transition: all .3s linear;
 }
 #zoom .close {
 	z-index: 99993;

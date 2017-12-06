@@ -62,8 +62,10 @@
             para = $.extend(defaults, options);
 
             this.init = function () {
+                ZYFILE.uploadBase64 = [];
                 this.createHtml();  // 创建组件html
                 this.createCorePlug();  // 调用核心js
+
                 if (para.data.length > 0) {
                     this.initHtml(para.data);
                 }
@@ -75,8 +77,7 @@
              * 返回: 无
              */
             this.createHtml = function () {
-                var multiple = "";  // 设置多选的参数
-                para.multiple ? multiple = "multiple" : multiple = "";
+                var multiple = para.multiple ? 'multiple': '';  // 设置多选的参数
                 var html = '';
 
                 if (para.dragDrop) {
@@ -88,8 +89,8 @@
                     html += '				<div class="convent_choice">';
                     html += '					<div class="andArea">';
                     html += '						<div class="filePicker">点击选择文件</div>';
-                    html += '                       <input id="fileImage" type="file" size="30" name="" ' + multiple + ' />';
-                    html += '                       <input id="changeImage" type="file" size="30" name="" />';
+                    html += '						<input id="fileImage" type="file" size="30" name="" ' + multiple + ' />';
+                    html += '					<input id="changeImage" type="file" size="30" name="" />';
                     html += '					</div>';
                     html += '				</div>';
                     html += '				<span id="fileDragArea" class="upload_drag_area">或者将文件拖到此处</span>';
@@ -119,8 +120,8 @@
                     html += '			<div class="status_bar">';
                     // html += '				<div id="status_info" class="info">选中0张文件，共0B。</div>';
                     html += '				<div class="btns">';
-                    html += '                   <input id="fileImage" type="file" size="30" name="" ' + multiple + ' />';
-                    html += '                   <input id="changeImage" type="file" size="30" name="" />';
+                    html += '						<input id="fileImage" type="file" size="30" name="" ' + multiple + ' />';
+                    html += '					<input id="changeImage" type="file" size="30" name="" />';
                     html += '					<div class="webuploader_pick">选择文件</div>';
                     html += '					<div class="upload_btn" style="display: '+(para.singlePut?'none':'block')  +'">开始上传</div>';
                     html += '				</div>';
@@ -180,22 +181,29 @@
              */
             this.funFilterEligibleFile = function (files) {
                 var arrFiles = [];  // 替换的文件数组
+
                 for (var i = 0, file; file = files[i]; i++) {
-                    // 上传文件数限制
-                    if(ZYFILE.uploadBase64.length + arrFiles.length + 1 > para.maxFile){
+
+                    //上传文件数限制
+                    if(para.maxFile && ZYFILE.uploadBase64.length + arrFiles.length + 1 > para.maxFile){
                         alert('已经超过' + para.maxFile + '个限制！');
                         break;
                     }
 
+
                     if (file.size >= para.maxFileSize) {
                         alert('您这个"' + file.name + '"文件大小超过' + parseFloat(para.maxFileSize / 1024 / 1024).toFixed(1) + 'M');
+                        continue;
                     } else if (file.type != "image/jpeg" && file.type != "image/png") {
                         alert('您这个"' + file.name + '"格式必须是jpg或png格式文件');
+                        continue;
                     } else {
-                        // 在这里需要判断当前所有文件中
+
                         arrFiles.push(file);
+
                     }
                 }
+
                 return arrFiles;
             };
 
@@ -205,7 +213,7 @@
              * 返回: 预览的html
              */
             this.initHtml = function (data) {
-                para.onComplete(data, "全部数据更新完成"); //原始数据更新
+
                 var html = "";
                 var imgWidth = parseInt(para.itemWidth.replace("px", "")) - 15;
                 var imgHeight = parseInt(para.itemHeight.replace("px", "")) - 10;
@@ -255,7 +263,7 @@
                     }
                     $("#uploadSuccess_" + i).show();
 
-                    html = '';
+
 
                 }
                 // 绑定删除按钮事件
@@ -310,8 +318,7 @@
                 // 绑定删除按钮
                 funBindDelEvent();
                 funBindHoverEvent();
-
-                ZYFILE.fileNum++;
+                para.onComplete(data, "全部数据更新完成"); //原始数据更新
                 return html;
             }
 
@@ -321,7 +328,7 @@
              * 参数: files 本次选择的文件
              * 返回: 预览的html
              */
-            this.funDisposePreviewHtml = function (file, e) {
+            this.funDisposePreviewHtml = function (file,e) {
                 var html = "";
                 var imgWidth = parseInt(para.itemWidth.replace("px", "")) - 15;
                 var imgHeight = parseInt(para.itemHeight.replace("px", "")) - 10;
@@ -331,14 +338,17 @@
                 var delHtml = "";
                 var changeHtml = "";
 
+                ZYFILE.uploadBase64.push({'status': 0, 'src': e.target.result, 'flag': ''});
+                var index = ZYFILE.uploadBase64.length - 1;
+
                 if (para.edit) {  // 显示编辑按钮
-                    editHtml = '<span class="file_edit" data-index="' + file.index + '" title="编辑"></span>';
+                    editHtml = '<span class="file_edit" data-index="' + index + '" title="编辑"></span>';
                 }
                 if (para.del) {  // 显示删除按钮
-                    delHtml = '<span class="file_del" data-index="' + file.index + '" title="删除"></span>';
+                    delHtml = '<span class="file_del" data-index="' + index + '" title="删除"></span>';
                 }
                 if (para.change) {  // 显示重新上传按钮
-                    changeHtml = '<span class="file_change" data-index="' + file.index + '" title="重新选择"></span>';
+                    changeHtml = '<span class="file_change" data-index="' + index + '" title="重新选择"></span>';
                 }
 
 
@@ -357,7 +367,7 @@
 
                 // 图片上传的是图片还是其他类型文件
                 if (file.type.indexOf("image") == 0) {
-                    html += '<div id="uploadList_' + file.index + '" class="upload_append_list addInit">';
+                    html += '<div id="uploadList_' + index + '" class="upload_append_list addInit">';
                     html += '	<div class="file_bar">';
                     html += '		<div style="padding:5px;">';
                     html += '			<p class="file_name" title="' + file.name + '">' + file.name + '</p>';
@@ -368,17 +378,17 @@
                     html += '	</div>';
                     html += '	<a style="height:' + para.itemHeight + ';width:' + para.itemWidth + ';" href="#" class="imgBox">';
                     html += '		<div class="uploadImg" style="width:' + imgWidth + 'px;max-width:' + imgWidth + 'px;max-height:' + imgHeight + 'px;">';
-                    html += '			<img id="uploadImage_' + file.index + '" class="upload_image" src="' + para.imgUrl + e.target.result + '" />';
+                    html += '			<img id="uploadImage_' + index + '" class="upload_image" src="' + para.imgUrl + e.target.result + '" />';
                     html += '		</div>';
                     html += '	</a>';
-                    html += '	<p id="uploadProgress_' + file.index + '" class="file_progress"></p>';
-                    html += '	<p id="uploadFailure_' + file.index + '" class="file_failure">上传失败，请重试</p>';
-                    html += '	<p id="uploadTailor_' + file.index + '" class="file_tailor" tailor="false">裁剪完成</p>';
-                    html += '	<p id="uploadSuccess_' + file.index + '" class="file_success"></p>';
+                    html += '	<p id="uploadProgress_' + index + '" class="file_progress"></p>';
+                    html += '	<p id="uploadFailure_' + index + '" class="file_failure">上传失败，请重试</p>';
+                    html += '	<p id="uploadTailor_' + index + '" class="file_tailor" tailor="false">裁剪完成</p>';
+                    html += '	<p id="uploadSuccess_' + index + '" class="file_success"></p>';
                     html += '</div>';
 
                 } else {
-                    html += '<div id="uploadList_' + file.index + '" class="upload_append_list">';
+                    html += '<div id="uploadList_' + index + '" class="upload_append_list">';
                     html += '	<div class="file_bar">';
                     html += '		<div style="padding:5px;">';
                     html += '			<p class="file_name">' + file.name + '</p>';
@@ -387,16 +397,16 @@
                     html += '	</div>';
                     html += '	<a style="height:' + para.itemHeight + ';width:' + para.itemWidth + ';" href="#" class="imgBox">';
                     html += '		<div class="uploadImg" style="width:' + imgWidth + 'px">';
-                    html += '			<img id="uploadImage_' + file.index + '" class="upload_image" src="' + fileImgSrc + '" />';
+                    html += '			<img id="uploadImage_' + index + '" class="upload_image" src="' + fileImgSrc + '" />';
                     html += '		</div>';
                     html += '	</a>';
-                    html += '	<p id="uploadProgress_' + file.index + '" class="file_progress"></p>';
-                    html += '	<p id="uploadFailure_' + file.index + '" class="file_failure">上传失败，请重试</p>';
-                    html += '	<p id="uploadSuccess_' + file.index + '" class="file_success"></p>';
+                    html += '	<p id="uploadProgress_' + index + '" class="file_progress"></p>';
+                    html += '	<p id="uploadFailure_' + index + '" class="file_failure">上传失败，请重试</p>';
+                    html += '	<p id="uploadSuccess_' + index + '" class="file_success"></p>';
                     html += '</div>';
                 }
 
-                ZYFILE.uploadBase64[file.index] = {'status': 0, 'src': e.target.result, 'flag': ''};
+
                 return html;
             };
 
@@ -467,12 +477,17 @@
                     onSelect: function (selectFiles, allFiles) {
                         para.onSelect(selectFiles, allFiles);  // 回调方法
                         // self.funSetStatusInfo(ZYFILE.funReturnNeedFiles());  // 显示统计信息
-                        var html = '', i = 0;
+
+
+                        var html = '',i=0;
                         // 组织预览html
                         var funDealtPreviewHtml = function () {
-                            file = selectFiles[i];
+
+                            var file = selectFiles[i];
                             if (file) {
                                 var reader = new FileReader();
+                                reader.readAsDataURL(file);
+
                                 reader.onload = function (e) {
                                     // 处理下配置参数和格式的html
                                     html += self.funDisposePreviewHtml(file, e);
@@ -481,13 +496,14 @@
                                     // 再接着调用此方法递归组成可以预览的html
                                     funDealtPreviewHtml();
                                 }
-                                reader.readAsDataURL(file);
+
                             } else {
                                 // 走到这里说明文件html已经组织完毕，要把html添加到预览区
                                 funAppendPreviewHtml(html);
 
                             }
                         };
+
 
                         // 添加预览html
                         var funAppendPreviewHtml = function (html) {
@@ -500,7 +516,6 @@
                             // 绑定删除按钮
                             funBindDelEvent();
                             funBindHoverEvent();
-
                             if(para.singlePut){
                                 $('#zyfile .upload_btn').click();
                             }
@@ -558,8 +573,8 @@
                             );
                         };
 
-                        funDealtPreviewHtml();
 
+                        funDealtPreviewHtml();
 
 
                     },
@@ -567,6 +582,23 @@
                         para.onDelete(k, d);  // 回调方法
                         // 移除效果
                         $("#uploadList_" + k).remove();
+                        var num;
+                        for(var i in ZYFILE.uploadBase64){
+                            num = parseInt(i) + 1;
+                            if(i >= k){
+                                $('#uploadList_' + num + ' .file_change').attr('data-index', i);
+                                $('#uploadList_' + num + ' .file_del').attr('data-index', i);
+                                $('#uploadList_' + num + ' .file_edit').attr('data-index', i);
+                                $('#uploadList_' + num).attr('id', 'uploadList_' + i);
+                                $('#uploadProgress_' + num).attr('id', 'uploadProgress_' + i);
+                                $('#uploadFailure_' + num).attr('id', 'uploadFailure_' + i);
+                                $('#uploadTailor_' + num).attr('id', 'uploadTailor_' + i);
+                                $('#uploadSuccess_' + num).attr('id', 'uploadSuccess_' + i);
+                                $('#uploadImage_' + num).attr('id', 'uploadImage_' + i);
+                            }
+                        }
+
+
                         // 重新设置统计栏信息
                         /*self.funSetStatusInfo(files);
                          console.info("剩下的文件");
@@ -672,6 +704,7 @@
 
                 $("#zyfile #changeImage").change(function (e) {
 
+
                     var file = e.target.files[0];
                     var index = $(this).attr('data-index');
                     if (file) {
@@ -692,7 +725,6 @@
                             $("#uploadFailure_" + index).hide();
 
                             $('#uploadImage_' + index).attr('src', evn.target.result);
-                            if (ZYFILE.uploadBase64[index]['flag']) ZYFILE.successNum--;
 
                             ZYFILE.uploadBase64[index]['src'] = evn.target.result;
                             ZYFILE.uploadBase64[index]['status'] = 0;
