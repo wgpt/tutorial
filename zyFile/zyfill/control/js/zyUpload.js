@@ -269,7 +269,8 @@
                 // 绑定删除按钮事件
                 var funBindDelEvent = function () {
                     // 删除方法
-                    $("#zyfile .init .file_del").click(function () {
+                    $("#zyfile .init .file_del").click(function (e) {
+                        e.preventDefault();
                         ZYFILE.funDeleteFile($(this).attr("data-index"), true);
                         return false;
                     });
@@ -525,7 +526,8 @@
                         var funBindDelEvent = function () {
                             if ($("#zyfile .addInit .file_del").length > 0) {
                                 // 删除方法
-                                $("#zyfile .addInit .file_del").click(function () {
+                                $("#zyfile .addInit .file_del").click(function (e) {
+                                    e.preventDefault();
                                     ZYFILE.funDeleteFile(parseInt($(this).attr("data-index")), true);
                                     return false;
                                 });

@@ -88,7 +88,7 @@ var ZYFILE = {
     funDeleteFile : function(k){
 
         var self = this;  // 在each中this指向没个v  所以先将this保留 0未上传 1已上传
-        if(self.uploadBase64[k].status == 0){
+        if(self.uploadBase64[k].status == 0 || !self.deleteUrl){
             self.uploadBase64.splice(k,1);
             self.onDelete(k);
             self.onComplete(self.uploadBase64,"全部数据更新完成");
@@ -141,7 +141,7 @@ var ZYFILE = {
         var self = this;  // 在each中this指向没个v  所以先将this保留
 
         if(self.uploadBase64[k]['status']){ // 已上传 跳过
-            if(k = self.length - 1){
+            if(k = self.uploadBase64.length - 1){
                 self.onComplete(self.uploadBase64,"全部数据更新完成");
             }
             return;
@@ -184,6 +184,10 @@ var ZYFILE = {
                     self.onFailure(k, d.message);
                 }
 
+                if(k = self.uploadBase64.length - 1){
+                    self.onComplete(self.uploadBase64,"全部数据更新完成");
+                }
+
 
             }
 
@@ -193,7 +197,7 @@ var ZYFILE = {
             // 回调到外部
             self.uploadBase64[k].status = 0;
             self.onFailure(k, '网络错误');
-            if(k = self.length - 1){
+            if(k = self.uploadBase64.length - 1){
                 self.onComplete(self.uploadBase64,"全部数据更新完成");
             }
 
