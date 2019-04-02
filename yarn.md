@@ -5,4 +5,4 @@ yarn config set global-folder F:/global
 
 
 
-F:/global  全局安装需要加入环境
+F:\Yarn\global\node_modules\.bin  全局安装需要加入环境
