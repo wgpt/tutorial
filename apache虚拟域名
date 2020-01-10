@@ -18,7 +18,7 @@
 
 2.host 127.0.0.1 www   **切记加host
 
-3.http.config
+3.httpd.config
 <Directory />
     AllowOverride none
     Require all denied
