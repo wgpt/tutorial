@@ -1,10 +1,10 @@
-#Ubuntu 下php7 mysql5.7 LNMP 环境搭建
+# Ubuntu 下php7 mysql5.7 LNMP 环境搭建
+
 在部署自己 LNMP 环境的时候，遇到了一些小挫折，现在把经验分享出来，让大家少走弯路。包括Php7.1安装与下载，SSL证书申请与配置，Mysql升级到5.7，Nginx服务器的简单配置。Let's start.
 
-##安装 Php 7.1
+## 安装 Php 7.1
 
-
-###1. 准备
+### 1. 准备
 
 安装 Php7.1 之前，要先安装language-pack-en-base这个包，运行：
 
@@ -44,7 +44,7 @@ php-propro - propro module for PHP
 ...
 ...
 ...
-###2. 安装：
+### 2. 安装：
 
 安装php7.1:
 
@@ -66,13 +66,14 @@ sudo apt-get install php7.1-fpm
 apt-get install php7.1-curl php7.1-xml php7.1-mcrypt php7.1-json php7.1-gd php7.1-mbstring  
 至此与php相关的模块安装安装完成。
 
-##安装Mysql
+## 安装Mysql
 直接安装Mysql5.7吧，5.7 可以说是里程碑式的版本，提高了性能，并增加了很多新的特性。特别是新增加的json字段，用过之后你会爱上她的！！
 
-MySQL 开发团队于 9.12 日宣布 MySQL 8.0.0 开发里程碑版本（DMR）发布！但是目前 8.0.0 还是开发版本，如果你希望体验和测试最新特性，可以从 http://dev.mysql.com/downloads/mysql/ 下载各个平台的安装包。不过，MySQL 软件包是越来越大了，Linux 平台上的二进制打包后就将近有 1 GB。如果在产品环境中使用，在 8.0 没有进入稳定版本之前，请继续使用 5.7 系列，当前最新的版本是 5.7.15 GA 版本——这只有 600 M 多。
+MySQL 开发团队于 9.12 日宣布 MySQL 8.0.0 开发里程碑版本（DMR）发布！但是目前 8.0.0 还是开发版本，如果你希望体验和测试最新特性，可以从 <http://dev.mysql.com/downloads/mysql/> 下载各个平台的安装包。不过，MySQL 软件包是越来越大了，Linux 平台上的二进制打包后就将近有 1 GB。如果在产品环境中使用，在 8.0 没有进入稳定版本之前，请继续使用 5.7 系列，当前最新的版本是 5.7.15 GA 版本——这只有 600 M 多。
+
 1. 下载.deb包到你的服务器：
 
-wget http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb  
+wget <http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb>  
 2. 然后使用dpkg命令添加Mysql的源：
 
 sudo dpkg -i mysql-apt-config_0.5.3-1_all.deb  
@@ -91,8 +92,11 @@ mysql  Ver 14.14 Distrib 5.7.15, for Linux (x86_64) using  EditLine wrapper
 如果你已经通过 ppa 的方式安装了 MySQL 5.6，首先得去掉这个源
 
 sudo apt-add-repository --remove ppa:ondrej/mysql-5.6  
+
 # 如果没有 apt-add-repository 先安装上
+
 # sudo apt-get install software-properties-common
+
 然后其它和上面一样，但最后要运行sudo mysql_upgrade -u root -p升级数据库，运行sudo service mysql restart重启数据库，这样你的数据会完好无缺（不出意外的话）。
 
 安装Nginx
@@ -101,7 +105,7 @@ sudo apt-add-repository --remove ppa:ondrej/mysql-5.6
 sudo apt-get -y install nginx  
 即可，然后运行curl localhost查看是否运行成功。你也可以直接访问你的IP地址
 
-##配置
+## 配置
 
 1. 配置php：
 
@@ -172,7 +176,7 @@ sudo chown -R www-data:www-data
 
 下面以laravel-blog为例，先clone我的laravel-blog,在/var/www/目录下运行：
 
-git clone https://github.com/lufficc/laravel-blog.git  
+git clone <https://github.com/lufficc/laravel-blog.git>  
 这会生成在/var/www/目录下生成laravel-blog目录，注意此时上面的Nginx配置的root要和这个一致，当前配置应该是root /var/www/laravel-blog/public;，而不再是root /var/www/your-project-name/public;。
 
 然后composer update，配置.env，数据库连接，没有安装Redis的话安装Redis:apt-get install redis-server。
@@ -186,7 +190,7 @@ sudo service php7.1-fpm restart
 more /var/log/nginx/error.log  
 修改nginx启动用户
 
-vi nginx.conf 
+vi nginx.conf
 
 修改user
 小结
@@ -194,6 +198,7 @@ vi nginx.conf
 啰嗦了那么长，其实实际配置起来很简单，把下面的命令复制，依次运行即可完成大部分的配置，然后再简单修改一下配置文件即可：
 
 # 安装php7.1
+
 sudo apt-get update  
 sudo apt-get install -y language-pack-en-base  
 locale-gen en_US.UTF-8
@@ -209,10 +214,12 @@ sudo apt-get install php7.1-fpm
 apt-get install php7.1-curl php7.1-xml php7.1-mcrypt php7.1-json php7.1-gd php7.1-mbstring
 
 # 安装mysql5.7
-wget http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb  
+
+wget <http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb>  
 sudo dpkg -i mysql-apt-config_0.5.3-1_all.deb  
 sudo apt-get update  
 sudo apt-get install mysql-server
 
 # 安装nginx
+
 sudo apt-get -y install nginx  
